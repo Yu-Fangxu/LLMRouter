@@ -225,44 +225,12 @@ The `data_path` section in the YAML is populated with placeholder paths to satis
 
 ---
 
-## Advantages
-
-- ✅ **Multi-modal routing**: jointly selects modality and model in one decision
-- ✅ **Soft-label training**: KL divergence over temperature-scaled scores — theoretically consistent with probability distributions
-- ✅ **Task-aware**: Task category nodes propagate coarse-grained context to all queries in the task
-- ✅ **KNN edges**: optional query–query similarity edges improve generalisation on unseen queries
-- ✅ **Lightweight**: L=1 HGT layer with D=128 achieves best performance; fast to train (~2 min on one GPU)
-
-## Limitations
-
-- ❌ **Time-series specific**: designed for queries containing `<ts>…<ts/>` tokens; not directly applicable to general NLP tasks
-- ❌ **Fixed candidate set**: adding a new model requires rebuilding the graph and retraining
-- ❌ **Online inference**: routing new queries requires pre-computed embeddings or a live embedding model
-- ❌ **Data requirement**: needs `router_data.csv` with ground-truth effect scores per (query, candidate) pair
-
----
-
 ## When to Use TSRouter
 
 **Good fit:**
 - Time-series analysis tasks spanning perception / reasoning / prediction / decision-making
 - You have both text-only LLMs and vision-language models (VLMs) as candidates
 - Queries vary in whether visual context helps (chart images vs. raw numbers)
-
-**Not recommended:**
-- Pure text NLP tasks (no visual modality needed) → use KNN/MLP/Graph Router
-- No performance labels to build soft labels from → use ELO or Smallest/Largest LLM
-
----
-
-## Related Routers
-
-| Router | Similarity | Difference |
-|--------|------------|------------|
-| GraphRouter | GNN-based, HGT architecture | bipartite query-LLM only, text modality only |
-| GMTRouter | Heterogeneous GNN | personalised, multi-turn, no modality selection |
-| MLPRouter | Learned routing | no graph, no modality |
-
 ---
 
 ## Technical Requirements
